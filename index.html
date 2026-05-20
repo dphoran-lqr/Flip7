@@ -14,21 +14,20 @@
     <meta name="apple-mobile-web-app-title" content="Flip 7" />
     <link rel="apple-touch-icon" href="icon-192.png" />
 
-    <!-- Theme colour (matches the app's teal header) -->
+    <!-- Theme colour -->
     <meta name="theme-color" content="#30ced5" />
 
-    <!-- Fonts (same as original) -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Questrial&display=swap" rel="stylesheet" />
 
-    <!-- Original app CSS & JS loaded from Firebase CDN -->
-    <link rel="stylesheet" crossorigin href="https://flip7-46611.web.app/assets/index-C2YwLGvX.css" />
-    <script type="module" crossorigin src="https://flip7-46611.web.app/assets/index-DIj0IY0c.js"></script>
+    <!-- Assets hosted locally in this repo -->
+    <link rel="stylesheet" href="assets/index-C2YwLGvX.css" />
+    <script type="module" src="assets/index-DIj0IY0c.js"></script>
 
     <style>
-      /* Match the original body style exactly */
       body {
         overflow: hidden;
         margin: 0;
@@ -40,14 +39,10 @@
   </head>
   <body>
     <div id="root"></div>
-
-    <!-- Register the service worker for PWA installability -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js').catch(() => {
-            // SW registration failed — app still works, just not installable offline
-          });
+          navigator.serviceWorker.register('sw.js').catch(() => {});
         });
       }
     </script>
