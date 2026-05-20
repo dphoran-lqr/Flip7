@@ -1,8 +1,7 @@
-const CACHE_NAME = 'flip7-v3';
+const CACHE_NAME = 'flip7-v4';
 
+// Never cache index.html — always fetch it fresh so updates apply immediately
 const PRECACHE_URLS = [
-  './',
-  './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
@@ -26,8 +25,16 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const url = event.request.url;
+
+  // Always fetch index.html fresh — never serve from cache
+  if (url.endsWith('/Flip7/') || url.endsWith('/Flip7/index.html')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Cache-first for assets and fonts
   if (
-    url.includes('flip7-46611.web.app/assets/') ||
+    url.includes('assets/') ||
     url.includes('fonts.googleapis.com') ||
     url.includes('fonts.gstatic.com')
   ) {
@@ -45,6 +52,7 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
+
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );
