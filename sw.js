@@ -1,7 +1,7 @@
-// Flip 7 PWA Service Worker
-// Strategy: network-first for the HTML shell, cache-first for Firebase CDN assets and fonts.
+// Flip 7 PWA Service Worker — cache version 2
+// Bumping the version forces old caches to be deleted and all files re-fetched.
 
-const CACHE_NAME = 'flip7-v1';
+const CACHE_NAME = 'flip7-v2';
 
 const PRECACHE_URLS = [
   './',
@@ -13,7 +13,6 @@ const PRECACHE_URLS = [
   'https://flip7-46611.web.app/assets/index-C2YwLGvX.css',
 ];
 
-// Install: pre-cache the core assets
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
@@ -21,7 +20,6 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Activate: clean up any old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -31,11 +29,9 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: cache-first for CDN assets and fonts, network-first for everything else
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // Cache-first: Firebase CDN assets + Google Fonts (they're versioned / immutable)
   if (
     url.includes('flip7-46611.web.app/assets/') ||
     url.includes('fonts.googleapis.com') ||
@@ -56,7 +52,6 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Network-first for all other requests (Firebase Analytics, etc.)
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );
