@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flip7-v4';
+const CACHE_NAME = 'flip7-v5';
 
 // Never cache index.html — always fetch it fresh so updates apply immediately
 const PRECACHE_URLS = [
