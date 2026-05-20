@@ -1,7 +1,4 @@
-// Flip 7 PWA Service Worker — cache version 2
-// Bumping the version forces old caches to be deleted and all files re-fetched.
-
-const CACHE_NAME = 'flip7-v2';
+const CACHE_NAME = 'flip7-v3';
 
 const PRECACHE_URLS = [
   './',
@@ -9,8 +6,6 @@ const PRECACHE_URLS = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  'https://flip7-46611.web.app/assets/index-DIj0IY0c.js',
-  'https://flip7-46611.web.app/assets/index-C2YwLGvX.css',
 ];
 
 self.addEventListener('install', event => {
@@ -31,7 +26,6 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const url = event.request.url;
-
   if (
     url.includes('flip7-46611.web.app/assets/') ||
     url.includes('fonts.googleapis.com') ||
@@ -51,7 +45,6 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );
