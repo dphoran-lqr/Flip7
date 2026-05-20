@@ -36,13 +36,84 @@
         background-color: #30ced5;
       }
     </style>
+
+    <!--
+      FIX 1: Suppress the "New Feature" toast after the first time it's seen.
+      Shows normally on first load, then never again.
+    -->
+    <script>
+      if (localStorage.getItem('flip7_toast_seen')) {
+        var s = document.createElement('style');
+        s.textContent = '.Toastify__toast-container { display: none !important; }';
+        document.head.appendChild(s);
+      } else {
+        localStorage.setItem('flip7_toast_seen', '1');
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+
+    <!--
+      FIX 2: Broken Flip 7 logo.
+      The app hard-codes /assets/Flip-7-Logo-... (absolute path) which
+      doesn't resolve correctly on GitHub Pages. Swap in the Firebase URL.
+    -->
+    <script>
+      document.addEventListener('error', function(e) {
+        if (e.target.tagName === 'IMG' &&
+            e.target.src &&
+            e.target.src.includes('Flip-7-Logo')) {
+          e.target.src = 'https://flip7-46611.web.app/assets/Flip-7-Logo-C2nj5RPA.png';
+        }
+      }, true);
+    </script>
+
+    <!--
+      FIX 3: Round navigation arrow cut off on the right side on mobile.
+      The inner content wrapper has margin-right:16px + width:100% which
+      pushes the right edge 16px off screen. This finds that element and
+      corrects its width so the right arrow is fully visible.
+    -->
+    <script>
+      (function () {
+        function fixLayout() {
+          // Only needed on mobile-width screens
+          if (window.innerWidth >= 600) return;
+
+          var els = document.querySelectorAll('#root div');
+          for (var i = 0; i < els.length; i++) {
+            var cs = window.getComputedStyle(els[i]);
+            if (
+              cs.display === 'grid' &&
+              cs.overflow === 'hidden' &&
+              Math.round(parseFloat(cs.marginRight)) === 16 &&
+              Math.round(parseFloat(cs.marginLeft)) === 16
+            ) {
+              // Shrink the element so it fits within the margins
+              els[i].style.width = 'calc(100% - 32px)';
+              return;
+            }
+          }
+          // React may not have rendered yet — retry shortly
+          setTimeout(fixLayout, 300);
+        }
+
+        if (document.readyState === 'complete') {
+          setTimeout(fixLayout, 500);
+        } else {
+          window.addEventListener('load', function () {
+            setTimeout(fixLayout, 500);
+          });
+        }
+      })();
+    </script>
+
+    <!-- Service worker registration -->
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js').catch(() => {});
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('sw.js').catch(function () {});
         });
       }
     </script>
