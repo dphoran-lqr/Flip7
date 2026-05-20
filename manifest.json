@@ -1,0 +1,24 @@
+{
+  "name": "Flip 7 Score Tracker",
+  "short_name": "Flip 7",
+  "description": "Score tracker for the Flip 7 card game",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#30ced5",
+  "theme_color": "#30ced5",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
